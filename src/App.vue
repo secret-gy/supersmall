@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import Tabbar from './components/tabbar/Tabbar'
-import TabbarItem from './components/tabbar/TabbarItem'
+import Tabbar from './components/common/tabbar/Tabbar'
+import TabbarItem from './components/common/tabbar/TabbarItem'
 export default {
   components:{
     TabbarItem,
@@ -38,5 +38,7 @@ export default {
 </script>
 
 <style>
-
+body {
+  margin: 0;
+}
 </style>

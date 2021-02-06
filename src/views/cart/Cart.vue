@@ -1,6 +1,6 @@
 <template>
     <div>
-        cart
+        cat
     </div>
 </template>
 
