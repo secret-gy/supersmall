@@ -24,6 +24,7 @@ export default {
     methods: {
         chooes(index){
             this.isActivated = index
+            this.$emit('choose', index)
         }
     }
 }

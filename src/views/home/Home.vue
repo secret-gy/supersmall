@@ -3,10 +3,13 @@
         <NavBar class="home-div">
             <div slot="NavBar-center">购物街</div>
         </NavBar>         
-        <HomeSwiper :banners='banners'></HomeSwiper>
-        <RecommendView :recommends='recommends'></RecommendView>
-        <Feature></Feature>
-        <TabControl :titles='["流行", "新款", "精品"]' class="tab-control"></TabControl>
+        <BetterCroll class="content">
+            <HomeSwiper :banners='banners'></HomeSwiper>
+            <RecommendView :recommends='recommends'></RecommendView>
+            <Feature></Feature>
+            <TabControl :titles='["流行", "新款", "精品"]' class="tab-control" @choose='choose'></TabControl>
+            <GoodsList :goods='goods[cType].list'></GoodsList>
+        </BetterCroll>
     </div>
 </template>
 
@@ -17,6 +20,8 @@ import HomeSwiper from './childComponents/HomeSwiper'
 import RecommendView from './childComponents/RecommendView'
 import Feature from './childComponents/Feature'
 import TabControl from '../../components/context/tabControl/TabControl'
+import GoodsList from '../../components/context/goods/GoodsList'
+import BetterCroll from '../../components/common/betterCroll/BetterCroll'
 export default {
     data(){
         return {
@@ -35,7 +40,8 @@ export default {
                     page: 1,
                     list: []
                 }
-            }
+            },
+            cType: 'pop'
         }
     },
     components: {
@@ -43,7 +49,9 @@ export default {
         HomeSwiper,
         RecommendView,
         Feature,
-        TabControl
+        TabControl,
+        GoodsList,
+        BetterCroll
     },
     created(){
         this.getHomemultidata(),
@@ -61,10 +69,22 @@ export default {
         getHomeGoodsData(type){
             const page = this.goods[type].page
             getHomeGoodsData(type, page).then(res => {
-                console.log(res);
                 this.goods[type].list.push(...res.data.data.list)
             })
             this.goods[type].page = page + 1
+        },
+        choose(index){
+            switch (index){
+                case 0:
+                    this.cType = 'pop'
+                    break
+                case 1:
+                    this.cType = 'new'
+                    break
+                case 2:
+                    this.cType = 'sell'
+                    break
+            }
         }
     }
 }
@@ -72,7 +92,8 @@ export default {
 
 <style scoped>
     #home {
-        padding-top: 44px;
+        /* padding-top: 44px; */
+        height: 100vh;
     }
 
     .home-div {
@@ -82,11 +103,20 @@ export default {
         right: 0;
         left: 0;
         top: 0;
-        z-index: 9;
+        z-index: 8;
     }
 
     .tab-control {
         position: sticky;
         top: 44px;
+        z-index: 9;
+    }
+
+    .content {
+        position: absolute;
+        top: 44px;
+        bottom: 49px;
+        left: 0;
+        right: 0;
     }
 </style>
