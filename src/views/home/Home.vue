@@ -3,13 +3,14 @@
         <NavBar class="home-div">
             <div slot="NavBar-center">购物街</div>
         </NavBar>         
-        <BetterCroll class="content">
+        <BetterCroll class="content" ref="battercroll" @scroll='scrollclick'>
             <HomeSwiper :banners='banners'></HomeSwiper>
             <RecommendView :recommends='recommends'></RecommendView>
             <Feature></Feature>
             <TabControl :titles='["流行", "新款", "精品"]' class="tab-control" @choose='choose'></TabControl>
             <GoodsList :goods='goods[cType].list'></GoodsList>
         </BetterCroll>
+        <BactTop @click.native='backtop' v-show="isshow"></BactTop>
     </div>
 </template>
 
@@ -22,6 +23,7 @@ import Feature from './childComponents/Feature'
 import TabControl from '../../components/context/tabControl/TabControl'
 import GoodsList from '../../components/context/goods/GoodsList'
 import BetterCroll from '../../components/common/betterCroll/BetterCroll'
+import BactTop from '../../components/context/backTop/BackTop'
 export default {
     data(){
         return {
@@ -41,7 +43,8 @@ export default {
                     list: []
                 }
             },
-            cType: 'pop'
+            cType: 'pop',
+            isshow: false
         }
     },
     components: {
@@ -51,7 +54,8 @@ export default {
         Feature,
         TabControl,
         GoodsList,
-        BetterCroll
+        BetterCroll,
+        BactTop
     },
     created(){
         this.getHomemultidata(),
@@ -85,6 +89,14 @@ export default {
                     this.cType = 'sell'
                     break
             }
+        },
+        backtop(){
+            // console.log(this.$refs.battercroll.BS1);
+            this.$refs.battercroll.BS1.scrollTo(0,0,1000)
+        },
+        scrollclick(position){
+            this.isshow = Math.abs(position.y) > 700? true: false
+            // console.log(position.y);
         }
     }
 }
