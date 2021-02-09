@@ -28,7 +28,7 @@ export default {
             this.$emit('scroll', position)
         })
         this.BS1.on('pullingUp',(o) => {
-            console.log('上拉完成');
+            this.$emit('pullingUp')
         })  
     },
     methods: {
