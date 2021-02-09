@@ -1,13 +1,11 @@
 <template>
-    <div>
         <Swiper>
             <SwiperItem v-for="(item, index) in banners" :key="index">
                 <a :href="item.link">
-                    <img :src="item.image" alt="">
+                    <img :src="item.image" alt="" @load='swipeimgload'>
                 </a>
             </SwiperItem>
         </Swiper>
-    </div>
 </template>
 
 <script>
@@ -15,7 +13,7 @@ import {Swiper, SwiperItem} from '../../../components/common/swiper/index'
 export default {
     data(){
         return {
-            
+            isload: false
         }
     },
     props: {
@@ -29,6 +27,14 @@ export default {
     components: {
         Swiper,
         SwiperItem
+    },
+    methods: {
+        swipeimgload(){
+            if(!this.isload){
+                this.$emit('swipeimgload')
+                this.isload = true
+            }
+        }
     }
 }
 </script>

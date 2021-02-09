@@ -1,5 +1,5 @@
 <template>
-    <div class="goods">
+    <div class="goods" @click="click">
         <img :src="goodsitem.show.img" alt="">
         <div class="goods-info">
             <p>{{goodsitem.title}}</p>
@@ -23,6 +23,12 @@ export default {
                 return Object
             }
         }
+    },
+    methods: {
+      click(){
+        // console.log(this.goodsitem);
+        this.$router.push('/detail/' + this.goodsitem.iid)
+      }
     }
 }
 </script>

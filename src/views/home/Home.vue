@@ -2,12 +2,14 @@
     <div id="home">
         <NavBar class="home-div">
             <div slot="NavBar-center">购物街</div>
-        </NavBar>         
-        <BetterCroll class="content" ref="battercroll" @scroll='scrollclick'>
-            <HomeSwiper :banners='banners'></HomeSwiper>
+        </NavBar>  
+        <TabControl :titles='["流行", "新款", "精品"]'  class="tab-control" @choose='choose' v-if="isoffset"></TabControl>       
+        <BetterCroll class="content" ref="battercroll" @scroll='scrollclick' @pullingUp='pullingUp'>
+            <HomeSwiper :banners='banners' @swipeimgload='swipeimgload' ref="swipeimgload"></HomeSwiper>
             <RecommendView :recommends='recommends'></RecommendView>
             <Feature></Feature>
-            <TabControl :titles='["流行", "新款", "精品"]' class="tab-control" @choose='choose'></TabControl>
+            <TabControl :titles='["流行", "新款", "精品"]' ref="tabcontrol" @choose='choose'></TabControl>
+            <!-- :class="{fixd: isoffset}" -->
             <GoodsList :goods='goods[cType].list'></GoodsList>
         </BetterCroll>
         <BactTop @click.native='backtop' v-show="isshow"></BactTop>
@@ -44,7 +46,11 @@ export default {
                 }
             },
             cType: 'pop',
-            isshow: false
+            isshow: false,
+            tabOffsetTop: 0,
+            offsetTop: 610,
+            isNew: false,
+            isoffset: false
         }
     },
     components: {
@@ -74,8 +80,8 @@ export default {
             const page = this.goods[type].page
             getHomeGoodsData(type, page).then(res => {
                 this.goods[type].list.push(...res.data.data.list)
+                this.goods[type].page = page + 1
             })
-            this.goods[type].page = page + 1
         },
         choose(index){
             switch (index){
@@ -89,6 +95,7 @@ export default {
                     this.cType = 'sell'
                     break
             }
+            // console.log(this.$refs.tabcontrol);
         },
         backtop(){
             // console.log(this.$refs.battercroll.BS1);
@@ -96,7 +103,16 @@ export default {
         },
         scrollclick(position){
             this.isshow = Math.abs(position.y) > 700? true: false
+            this.isoffset = Math.abs(position.y) >=this.offsetTop? true: false
             // console.log(position.y);
+        },
+        pullingUp(){
+            this.getHomeGoodsData(this.cType)
+            this.$refs.battercroll.BS1.finishPullUp()
+            this.$refs.battercroll.BS1.refresh()
+        },
+        swipeimgload(){
+            // console.log(this.$refs.swipeimgload.$el.offsetTop);
         }
     }
 }
@@ -106,23 +122,26 @@ export default {
     #home {
         /* padding-top: 44px; */
         height: 100vh;
+        /* position: relative; */
     }
 
     .home-div {
         color: white;
         background-color: pink;
-        position: fixed;
+        /* position: fixed;
         right: 0;
         left: 0;
         top: 0;
-        z-index: 8;
+        z-index: 8; */
     }
 
-    .tab-control {
-        position: sticky;
+    /* .fixd {
+        position: fixed;
+        left: 0;
+        right: 0;
         top: 44px;
         z-index: 9;
-    }
+    } */
 
     .content {
         position: absolute;
@@ -130,5 +149,15 @@ export default {
         bottom: 49px;
         left: 0;
         right: 0;
+        overflow: hidden;
+    }
+
+    .tab-control {
+        position: relative;
+        /* top: 0;
+        left: 0; */
+        z-index: 10;
+        margin-top: -1px;
+
     }
 </style>

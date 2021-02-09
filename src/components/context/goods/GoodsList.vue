@@ -1,6 +1,6 @@
 <template>
-    <div class="goods">
-        <GoodsListItem v-for="(item, index) in goods" :key="index" :goodsitem='item'></GoodsListItem>
+    <div class="goods" >
+        <GoodsListItem v-for="(item, index) in goods" :key="index" :goodsitem='item' @click="click(item)"></GoodsListItem>
     </div>
 </template>
 
@@ -24,8 +24,10 @@ export default {
         }
     },
     methods: {
-        abc(){
-            console.log(this.goods);
+        click(item){
+            console.log(1);
+            console.log(item);
+            // this.$router.push('/detail' + item)
         }
     }
 }
