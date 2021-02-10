@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <NavBar>
+    <div id="detail">
+        <NavBar class="navbar">
             <div slot="NavBar-left" class="back" @click="backclick">
                 <img src="@/assets/img/common/back.svg" alt="">
             </div>
@@ -14,14 +14,27 @@
             </div>
             </div>
         </NavBar>
-        <DetailSwiper :topImg="topImg"></DetailSwiper>
+        <Scroll class="content">
+            <DetailSwiper :topImg="topImg"></DetailSwiper>
+            <DetailBaseInfo :goods="goods"></DetailBaseInfo>
+            <DetailShopInfo :shop="shop"></DetailShopInfo>
+            <DetailGoodsInfo :detailInfo="detailInfo"></DetailGoodsInfo>
+            <DetailParamInfo :paramInfo="paramInfo"></DetailParamInfo>
+            <DetailCommentInfo :commentInfo="commentInfo"></DetailCommentInfo>
+        </Scroll>
     </div>
 </template>
 
 <script>
+import Scroll from '../../components/common/scroll/Scroll'
 import NavBar from '../../components/common/navbar/NavBar'
 import DetailSwiper from './childComponents/DetailSwiper'
-import { getTopImg } from '../../network/detail' 
+import { getTopImg, Goods, Shop, GoodsParam } from '../../network/detail' 
+import DetailBaseInfo from './childComponents/DetailBaseInfo'
+import DetailShopInfo from './childComponents/DetailShopInfo'
+import DetailGoodsInfo from './childComponents/DetailGoodsInfo'
+import DetailParamInfo from './childComponents/DetailParamInfo'
+import DetailCommentInfo from './childComponents/DetailCommentInfo'
 export default {
     data(){
         return {
@@ -41,12 +54,23 @@ export default {
                 }
             ],
             curryindex: 0,
-            topImg: []
+            topImg: [],
+            goods: {},
+            shop: {},
+            detailInfo: {},
+            paramInfo: {},
+            commentInfo: {}
         }
     },
     components: {
+        Scroll,
         NavBar,
-        DetailSwiper
+        DetailSwiper,
+        DetailBaseInfo,
+        DetailShopInfo,
+        DetailGoodsInfo,
+        DetailParamInfo,
+        DetailCommentInfo
     },
     created(){
         // console.log(this.$route);
@@ -64,6 +88,20 @@ export default {
             getTopImg(iid).then(res => {
                 this.topImg.push(...res.data.result.itemInfo.topImages)
                 // this.topImg = res.data.result.itemInfo.topImages
+
+                const data = res.data.result
+
+                this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
+
+                this.shop = new Shop(data.shopInfo);
+
+                this.detailInfo = data.detailInfo
+
+                this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule);
+
+                if (data.rate.list) {
+                    this.commentInfo = data.rate.list[0];
+                }
             })
         }
     }
@@ -71,6 +109,23 @@ export default {
 </script>
 
 <style scoped>
+#detail {
+    position: relative;
+    z-index: 10;
+    background-color: #fff;
+    height: 100vh;
+  }
+
+.content {
+    height: calc(100% - 44px);
+}
+
+.navbar {
+    position: relative;
+    z-index: 10;
+    background-color: #fff;
+}
+
 .back {
     padding-top: 5px;
 }
