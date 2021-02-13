@@ -110,8 +110,8 @@ export default {
             obj.desc = this.goods.desc;
             obj.newPrice = this.goods.nowPrice;
             this.$store.dispatch('addCart', obj).then(res => {
-                console.log(this.$toast);
-                // this.$toast.methods.show(res, 1500)
+                // console.log(this.$toast);
+                this.$toast.show(res)
                 // console.log(this.$toast.methods.show(res));
                 // console.log(res);
             })

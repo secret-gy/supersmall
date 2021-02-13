@@ -1,6 +1,6 @@
 <template>
-    <div v-show="isshow" class="toast">
-        <div>{{msg}}</div>
+    <div v-if="isshow" class="toast">
+        <div>{{message}}</div>
     </div>    
 </template>
 
@@ -13,9 +13,13 @@ export default {
         }
     },
     methods: {
-        show(message='未知操作', time=1500){
-            console.log(this);
-            console.log(this.isshow);
+        show(message, time=1500){
+            this.message = message
+            this.isshow = true
+            setTimeout(() => {
+                this.message = '',
+                this.isshow = false
+            },time)
         }
     }
 }
