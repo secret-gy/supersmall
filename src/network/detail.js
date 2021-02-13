@@ -1,4 +1,3 @@
-import { construct } from 'core-js/fn/reflect'
 import {request} from './request'
 
 export function getTopImg(iid){
@@ -10,6 +9,11 @@ export function getTopImg(iid){
     })
 }
 
+export function getRecomment(){
+    return request({
+        url: '/recommend'
+    })
+}
 
 export class Goods{
     constructor(itemInfo, columns, services){

@@ -9,7 +9,7 @@ import GoodsListItem from './GoodsListItem'
 export default {
     data(){
         return {
-
+            
         }
     },
     components: {
